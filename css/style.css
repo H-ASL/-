@@ -1,0 +1,96 @@
+/* ===== 基础重置与版心 ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
+    "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  color: #1f2933;
+  background: #f6f8fa;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 头部 / 导航 ===== */
+header {
+  background: #ffffff;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+header h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+header nav {
+  display: flex;
+  gap: 14px;
+}
+
+header nav a {
+  color: #475569;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+header nav a:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* ===== 主内容区 ===== */
+main {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* ===== 卡片（section 统一精致化） ===== */
+section {
+  background: #ffffff;
+  padding: 28px 26px;
+  margin-bottom: 24px;
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+}
+
+section h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+/* ===== 列表 ===== */
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+/* ===== 高亮文字 ===== */
+.highlight {
+  color: #6366f1;
+}
+
+/* ===== 页脚 ===== */
+footer {
+  text-align: center;
+  padding: 22px 20px;
+  color: #64748b;
+  font-size: 14px;
+}
