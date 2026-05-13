@@ -189,3 +189,29 @@ footer {
         height: 120px;
     }
 }
+/* ===== 关于我页面 ===== */
+.card {
+    max-width: 800px;
+    margin: 40px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.card hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
