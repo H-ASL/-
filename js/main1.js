@@ -78,3 +78,49 @@ document.querySelectorAll(".filter-bar button").forEach(btn => {
 });
 
 loadPhotos();
+const supabase = window.supabase.createClient(
+  "https://你的项目.supabase.co",
+  "你的anon_key"
+);
+const uploadBtn = document.getElementById("uploadBtn");
+const input = document.getElementById("uploadInput");
+
+uploadBtn.onclick = () => input.click();
+
+input.onchange = async (e) => {
+    const user = (await supabase.auth.getUser()).data.user;
+    const file = e.target.files[0];
+
+    const path = `${user.id}/${Date.now()}.jpg`;
+
+    await supabase.storage
+        .from("photos")
+        .upload(path, file);
+
+    const url = supabase.storage
+        .from("photos")
+        .getPublicUrl(path).data.publicUrl;
+
+    await supabase.from("photos").insert({
+        user_id: user.id,
+        url,
+        title: file.name,
+        category: "mountain"
+    });
+
+    location.reload();
+};
+async function loadPhotos() {
+    const { data } = await supabase
+        .from("photos")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    data.forEach(p => {
+        const img = document.createElement("img");
+        img.src = p.url;
+        document.getElementById("gallery").appendChild(img);
+    });
+}
+
+loadPhotos();
