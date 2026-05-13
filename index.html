@@ -18,16 +18,16 @@
 
 <main>
     <!-- 上传区域 -->
-<div class="upload-area">
-    <input type="file" id="uploadInput" accept="image/*" multiple hidden>
-    <button id="uploadBtn">+ 上传照片</button>
+    <div class="upload-area">
+        <input type="file" id="uploadInput" accept="image/*" multiple hidden>
+        <button id="uploadBtn">+ 上传照片</button>
 
-    <select id="categorySelect">
-        <option value="mountain">山川</option>
-        <option value="ocean">海洋</option>
-        <option value="forest">森林</option>
-    </select>
-</div>
+        <select id="categorySelect">
+            <option value="mountain">山川</option>
+            <option value="ocean">海洋</option>
+            <option value="forest">森林</option>
+        </select>
+    </div>
 
     <!-- 分类按钮 -->
     <div class="filter-bar">
@@ -39,36 +39,7 @@
 
     <!-- 瀑布流容器 -->
     <div class="masonry" id="gallery">
-
-        <!-- 每张照片 -->
-        <figure class="item" data-category="mountain">
-            <img src="/-/images/image1.jpg" alt="雪山">
-            <div class="overlay">
-                <h3>雪山日落</h3>
-            </div>
-        </figure>
-
-        <figure class="item" data-category="ocean">
-            <img src="/-/images/image2.jpg" alt="海洋">
-            <div class="overlay">
-                <h3>海上帆船</h3>
-            </div>
-        </figure>
-
-        <figure class="item" data-category="forest">
-            <img src="/-/images/image3.jpg" alt="森林">
-            <div class="overlay">
-                <h3>林间光影</h3>
-            </div>
-        </figure>
-
-        <figure class="item" data-category="mountain">
-            <img src="/-/images/image4.jpg" alt="红叶">
-            <div class="overlay">
-                <h3>秋日红叶</h3>
-            </div>
-        </figure>
-
+        <!-- 动态生成的图片项将在这里显示 -->
     </div>
 </main>
 
@@ -83,6 +54,127 @@
     <p>&copy; 2026 hlzt · 风景摄影</p>
 </footer>
 
-<script src="/-/js/main.js"></script>
+<script>
+    // ================== DOM 元素 ==================
+    const gallery = document.getElementById('gallery');
+    const filterBar = document.querySelector('.filter-bar');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const lightboxTitle = document.getElementById('lightbox-title');
+    const uploadInput = document.getElementById('uploadInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const categorySelect = document.getElementById('categorySelect');
+
+    // ================== 数据层 ==================
+    const STORAGE_KEY = 'photo_portfolio';
+
+    function getPhotos() {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    }
+
+    function savePhotos(photos) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
+    }
+
+    // ================== 渲染逻辑 ==================
+    function renderGallery(filter = 'all') {
+        gallery.innerHTML = '';
+        const photos = getPhotos();
+
+        photos
+            .filter(p => filter === 'all' || p.category === filter)
+            .forEach((p, index) => {
+                const item = document.createElement('figure');
+                item.className = 'item';
+                item.dataset.category = p.category;
+
+                item.innerHTML = `
+                    <button class="delete-btn">&times;</button>
+                    <img src="${p.src}" alt="${p.title}">
+                    <div class="overlay">
+                        <h3>${p.title}</h3>
+                    </div>
+                `;
+
+                item.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation(); // 阻止事件冒泡，防止触发灯箱
+                    if (confirm('确定要删除这张作品吗？')) {
+                        const currentFilter = document.querySelector('.filter-bar .active').dataset.filter;
+                        deletePhoto(index, currentFilter);
+                    }
+                });
+
+                // 点击图片打开灯箱
+                item.querySelector('img').addEventListener('click', () => {
+                    lightboxImg.src = p.src;
+                    lightboxTitle.textContent = p.title;
+                    lightbox.style.display = 'flex';
+                });
+
+                gallery.appendChild(item);
+            });
+    }
+
+    // ================== 删除逻辑 ==================
+    function deletePhoto(index, currentFilter) {
+        const photos = getPhotos();
+        photos.splice(index, 1);
+        savePhotos(photos);
+        renderGallery(currentFilter); // 重新渲染当前分类
+    }
+
+    // ================== 分类筛选 ==================
+    filterBar.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') return;
+
+        filterBar.querySelector('.active')?.classList.remove('active');
+        e.target.classList.add('active');
+
+        const filter = e.target.dataset.filter;
+        renderGallery(filter);
+    });
+
+    // ================== 上传功能 ==================
+    uploadBtn.addEventListener('click', () => uploadInput.click());
+
+    uploadInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+
+        const photos = getPhotos();
+        const category = categorySelect.value;
+
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                photos.unshift({
+                    src: event.target.result,
+                    title: file.name.split('.')[0],
+                    category: category
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+
+        setTimeout(() => {
+            savePhotos(photos);
+            renderGallery('all'); // 上传后默认回到“全部”视图
+        }, 100);
+    });
+
+    // ================== 灯箱关闭 ==================
+    lightbox.querySelector('.close').addEventListener('click', () => {
+        lightbox.style.display = 'none';
+    });
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            lightbox.style.display = 'none';
+        }
+    });
+
+    // ================== 初始化 ==================
+    renderGallery('all');
+</script>
+
 </body>
 </html>

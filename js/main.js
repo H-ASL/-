@@ -114,3 +114,62 @@ function loadFromLocal() {
 }
 
 loadFromLocal();
+//修改点：增加删除功能
+const STORAGE_KEY = "photos";
+
+function getPhotos() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function savePhotos(photos) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
+}
+
+function deletePhoto(index) {
+    const photos = getPhotos();
+    photos.splice(index, 1);
+    savePhotos(photos);
+}
+
+function renderGallery(filter = "all") {
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    const photos = getPhotos();
+
+    photos
+        .filter(p => filter === "all" || p.category === filter)
+        .forEach((p, i) => {
+            const item = document.createElement("figure");
+            item.className = "item";
+            item.dataset.category = p.category;
+
+            item.innerHTML = `
+                <button class="delete-btn">&times;</button>
+                <img src="${p.src}" />
+                <div class="overlay">
+                    <h3>${p.title}</h3>
+                </div>
+            `;
+
+            // 删除按钮事件
+            item.querySelector(".delete-btn").addEventListener("click", e => {
+                e.stopPropagation(); // 防止触发灯箱
+                if (confirm("确定要删除这张作品吗？")) {
+                    deletePhoto(i);
+                    renderGallery(filter);
+                }
+            });
+
+            // 点击图片打开灯箱
+            item.querySelector("img").addEventListener("click", () => {
+                document.getElementById("lightbox-img").src = p.src;
+                document.getElementById("lightbox-title").innerText = p.title;
+                document.getElementById("lightbox").style.display = "flex";
+            });
+
+            gallery.appendChild(item);
+        });
+}
+
+renderGallery();

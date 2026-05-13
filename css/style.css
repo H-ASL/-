@@ -283,6 +283,7 @@ footer {
     overflow: hidden;
     background: white;
     cursor: pointer;
+    position: relative;
 }
 
 .item img {
@@ -367,4 +368,25 @@ footer {
     padding: 8px 12px;
     border-radius: 20px;
     border: 1px solid #ddd;
+}
+/* ===== 删除按钮 ===== */
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+}
+
+.delete-btn:hover {
+    background: rgba(220, 38, 38, 0.9);
 }
