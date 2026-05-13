@@ -1,59 +1,88 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>风景摄影作品集</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/-/css/style.css">
 </head>
 <body>
 
-<!-- 头部 -->
 <header>
-    <h1>风景摄影</h1>
+    <h1>风景摄影作品集</h1>
     <nav>
-        <a href="index.html" class="active">首页</a>
-        <a href="about.html">关于我</a>
-        <a href="contact.html">联系</a>
+        <a href="/-/index.html">首页</a>
+        <a href="/-/about.html">关于我</a>
+        <a href="/-/contact.html">联系我</a>
     </nav>
 </header>
 
-<main class="container">
+<main>
+    <!-- 上传区域 -->
+<div class="upload-area">
+    <input type="file" id="uploadInput" accept="image/*" multiple hidden>
+    <button id="uploadBtn">+ 上传照片</button>
 
-    <!-- 上传区 -->
-    <div class="upload-area">
-        <input type="file" id="uploadInput" multiple accept="image/*" hidden />
-        <button id="uploadBtn">+ 上传作品</button>
-
-        <select id="categorySelect">
-            <option value="mountain">山川</option>
-            <option value="ocean">海洋</option>
-            <option value="forest">森林</option>
-        </select>
-    </div>
+    <select id="categorySelect">
+        <option value="mountain">山川</option>
+        <option value="ocean">海洋</option>
+        <option value="forest">森林</option>
+    </select>
+</div>
 
     <!-- 分类按钮 -->
     <div class="filter-bar">
-        <button data-filter="all" class="active">全部</button>
+        <button data-filter="all">全部</button>
         <button data-filter="mountain">山川</button>
         <button data-filter="ocean">海洋</button>
         <button data-filter="forest">森林</button>
     </div>
 
-    <!-- 瀑布流 -->
+    <!-- 瀑布流容器 -->
     <div class="masonry" id="gallery">
-        <!-- JS 动态生成 -->
-    </div>
 
+        <!-- 每张照片 -->
+        <figure class="item" data-category="mountain">
+            <img src="/-/images/image1.jpg" alt="雪山">
+            <div class="overlay">
+                <h3>雪山日落</h3>
+            </div>
+        </figure>
+
+        <figure class="item" data-category="ocean">
+            <img src="/-/images/image2.jpg" alt="海洋">
+            <div class="overlay">
+                <h3>海上帆船</h3>
+            </div>
+        </figure>
+
+        <figure class="item" data-category="forest">
+            <img src="/-/images/image3.jpg" alt="森林">
+            <div class="overlay">
+                <h3>林间光影</h3>
+            </div>
+        </figure>
+
+        <figure class="item" data-category="mountain">
+            <img src="/-/images/image4.jpg" alt="红叶">
+            <div class="overlay">
+                <h3>秋日红叶</h3>
+            </div>
+        </figure>
+
+    </div>
 </main>
 
-<!-- 灯箱 -->
+<!-- ===== 灯箱 ===== -->
 <div class="lightbox" id="lightbox">
     <span class="close">&times;</span>
-    <img src="" alt="preview" />
-    <p id="lightboxTitle"></p>
+    <img src="" alt="">
+    <p id="lightbox-title"></p>
 </div>
 
-<script src="main.js"></script>
+<footer>
+    <p>&copy; 2026 hlzt · 风景摄影</p>
+</footer>
+
+<script src="/-/js/main.js"></script>
 </body>
 </html>
