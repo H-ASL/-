@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>风景摄影社区</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <title>风景摄影作品集</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+<!-- 头部 -->
 <header>
-    <h1>光影纪 · 风景摄影</h1>
+    <h1>风景摄影</h1>
     <nav>
         <a href="index.html" class="active">首页</a>
         <a href="about.html">关于我</a>
@@ -17,11 +19,12 @@
 </header>
 
 <main class="container">
-    <!-- 上传区域 (使用文档中的 .upload-area) -->
+
+    <!-- 上传区 -->
     <div class="upload-area">
-        <input type="file" id="uploadInput" multiple accept="image/*" hidden>
+        <input type="file" id="uploadInput" multiple accept="image/*" hidden />
         <button id="uploadBtn">+ 上传作品</button>
-        
+
         <select id="categorySelect">
             <option value="mountain">山川</option>
             <option value="ocean">海洋</option>
@@ -29,7 +32,7 @@
         </select>
     </div>
 
-    <!-- 分类筛选 (使用文档中的 .filter-bar) -->
+    <!-- 分类按钮 -->
     <div class="filter-bar">
         <button data-filter="all" class="active">全部</button>
         <button data-filter="mountain">山川</button>
@@ -37,17 +40,18 @@
         <button data-filter="forest">森林</button>
     </div>
 
-    <!-- 瀑布流容器 (使用文档中的 .masonry) -->
+    <!-- 瀑布流 -->
     <div class="masonry" id="gallery">
-        <!-- JS 动态插入 .item -->
+        <!-- JS 动态生成 -->
     </div>
+
 </main>
 
-<!-- 灯箱 (使用文档中的 .lightbox) -->
+<!-- 灯箱 -->
 <div class="lightbox" id="lightbox">
     <span class="close">&times;</span>
-    <img src="" alt="预览大图">
-    <p id="lightbox-title"></p>
+    <img src="" alt="preview" />
+    <p id="lightboxTitle"></p>
 </div>
 
 <script src="main.js"></script>
