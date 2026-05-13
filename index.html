@@ -1,21 +1,54 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>风景摄影社区</title>
-<link rel="stylesheet" href="/-/css/style.css">
+    <meta charset="UTF-8">
+    <title>风景摄影社区</title>
+
+    <!-- ✅ 1. 引入 Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <header>
     <h1>风景摄影社区</h1>
-    <nav>
-        <button id="loginBtn">登录 / 注册</button>
-        <span id="userInfo"></span>
-    </nav>
+    <button id="loginBtn">登录 / 注册</button>
+    <span id="userInfo"></span>
 </header>
 
 <main>
+    <div id="gallery"></div>
+</main>
+
+<!-- ✅ 2. 初始化 Supabase（必须放在 body 底部） -->
+<script>
+const supabase = window.supabase.createClient(
+    "https://你的项目.supabase.co",
+    "你的anon_key"
+);
+
+// 登录按钮
+document.getElementById("loginBtn").onclick = async () => {
+    await supabase.auth.signInWithOAuth({
+        provider: "github"
+    });
+};
+
+// 监听登录状态
+supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+        document.getElementById("userInfo").innerText =
+            "已登录：" + session.user.email;
+    }
+});
+
+// ✅ 测试数据库连接（你现在就可以用）
+supabase.from("photos").select("*").then(res => {
+    console.log("数据库连接成功", res);
+});
+</script>
+
+</body>
+</html>
 
 <div class="upload-area">
     <input type="file" id="uploadInput" multiple hidden>
