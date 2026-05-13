@@ -2,29 +2,78 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>关于我</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我 - 风景摄影作品集</title>
+    <link rel="stylesheet" href="/-/css/style.css">
+    <!-- 可以加一个简单的图标库，让页面更生动 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-<header>
-    <h1>关于我</h1>
-    <nav>
-        <a href="index.html">首页</a>
-        <a href="about.html">关于我</a>
-        <a href="contact.html">联系我</a>
-    </nav>
-</header>
+    <header>
+        <h1>关于我</h1>
+        <nav>
+            <a href="/-/index.html">首页</a>
+            <a href="/~/about.html" class="active">关于我</a> <!-- 当前页面高亮 -->
+            <a href="/~/contact.html">联系我</a>
+        </nav>
+    </header>
 
-<main>
-    <section>
-        <h2>自我介绍</h2>
-        <p>
-            我是一名学习 Web 开发的学生，喜欢用代码解决问题，
-            目前正在学习 Git、GitHub 和前端工程化。
-        </p>
-    </section>
-</main>
+    <main>
+        <section class="about-section">
+            
+            <!-- 个人简介卡片 -->
+            <div class="card profile-card">
+                <!-- 建议放一张你的个人头像或半身照 -->
+                <div class="avatar-container">
+                    <!-- 如果没有照片，可以先用一个风景图代替，或者放个图标 -->
+                    <img src="/-/images/landscape1.jpg" alt="我的头像" class="avatar">
+                    <!-- 或者用图标代替：<i class="fas fa-camera fa-5x"></i> -->
+                </div>
+                
+                <h2>你好，我是 <span class="highlight">摄影师的名字</span></h2>
+                <span class="job-title">风景摄影师 / 自然爱好者</span>
+                
+                <hr class="divider">
+
+                
+                    欢迎来到我的小世界。我热衷于用镜头捕捉大自然的壮丽与宁静。
+                    从清晨的第一缕阳光洒在雪山顶，到夕阳下海面泛起的金色波光，
+                    每一次按下快门，都是我与自然的一次对话。
+                
+                
+                
+                    我相信，每一张照片背后都有一个故事。我希望通过这些作品，
+                    能带你暂时逃离城市的喧嚣，感受那份纯粹的美好与治愈。
+                
+
+                <!-- 技能或兴趣标签 -->
+                <div class="tags">
+                    <span class="tag"><i class="fas fa-mountain"></i> 自然风光</span>
+                    <span class="tag"><i class="fas fa-tree"></i> 森林秘境</span>
+                    <span class="tag"><i class="fas fa-water"></i> 海岸线</span>
+                    <span class="tag"><i class="fas fa-sun"></i> 光影捕捉</span>
+                </div>
+            </div>
+
+            <!-- 为什么喜欢摄影 -->
+            <div class="card why-card">
+                <h3><i class="fas fa-heart"></i> 为什么热爱摄影？</h3>
+                
+                    摄影对我来说，不仅仅是记录，更是一种表达。它让我学会观察，
+                    学会等待，学会在平凡的景色中发现不平凡的美。
+                
+                <blockquote>
+                    "摄影是光与影的艺术，而自然，是最伟大的艺术家。"
+                </blockquote>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 我的风景摄影作品集. All rights reserved.
+    </footer>
 
 </body>
 </html>
