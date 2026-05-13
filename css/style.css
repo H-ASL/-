@@ -215,3 +215,33 @@ footer {
     border-top: 1px solid #eee;
     margin: 20px 0;
 }
+/* ===== 首页作品展示优化 ===== */
+
+/* 限制图片最大高度，防止过大 */
+.photo-grid img {
+    width: 100%;
+    height: 240px;          /* ✅ 统一高度 */
+    object-fit: cover;      /* ✅ 不变形，裁剪 */
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* hover 放大一点，增强可点击感 */
+.photo-grid a:hover img {
+    transform: scale(1.03);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+/* 卡片本身不要太宽 */
+.photo-grid figure {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: white;
+}
+.photo-grid {
+    gap: 20px;
+}
+.photo-grid a {
+    cursor: zoom-in;
+}
