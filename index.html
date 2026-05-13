@@ -26,7 +26,6 @@
             <option value="mountain">山川</option>
             <option value="ocean">海洋</option>
             <option value="forest">森林</option>
-            <option value="animal">动物</option>
         </select>
     </div>
 
@@ -36,7 +35,6 @@
         <button data-filter="mountain">山川</button>
         <button data-filter="ocean">海洋</button>
         <button data-filter="forest">森林</button>
-        <button data-filter="animal">动物</button>
     </div>
 
     <!-- 瀑布流容器 -->
@@ -90,7 +88,7 @@
                 item.className = 'item';
                 item.dataset.category = p.category;
 
-                // ✅ 修改点 1：在 HTML 结构中加入删除按钮
+                // 修改点 1：在 HTML 结构中加入删除按钮
                 item.innerHTML = `
                     <button class="delete-btn">&times;</button>
                     <img src="${p.src}" alt="${p.title}">
@@ -99,7 +97,7 @@
                     </div>
                 `;
 
-                // ✅ 修改点 2：为删除按钮绑定事件
+                // 修改点 2：为删除按钮绑定事件
                 item.querySelector('.delete-btn').addEventListener('click', (e) => {
                     e.stopPropagation(); // 阻止事件冒泡，防止触发灯箱
                     if (confirm('确定要删除这张作品吗？')) {
