@@ -1,31 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>风景摄影社区</title>
-
-    <!-- ✅ 样式 -->
-    <link rel="stylesheet" href="style.css" />
-
-    <!-- ✅ 如需使用 CDN 图标可保留（非必须） -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-        rel="stylesheet"
-    />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <h1>风景摄影社区</h1>
-    <span id="userInfo">欢迎浏览</span>
+    <h1>光影纪 · 风景摄影</h1>
+    <nav>
+        <a href="index.html" class="active">首页</a>
+        <a href="about.html">关于我</a>
+        <a href="contact.html">联系</a>
+    </nav>
 </header>
 
-<main>
-    <!-- ✅ 上传区域 -->
+<main class="container">
+    <!-- 上传区域 (使用文档中的 .upload-area) -->
     <div class="upload-area">
-        <input type="file" id="uploadInput" multiple hidden />
-        <button id="uploadBtn">+ 上传照片</button>
-
+        <input type="file" id="uploadInput" multiple accept="image/*" hidden>
+        <button id="uploadBtn">+ 上传作品</button>
+        
         <select id="categorySelect">
             <option value="mountain">山川</option>
             <option value="ocean">海洋</option>
@@ -33,7 +29,7 @@
         </select>
     </div>
 
-    <!-- ✅ 分类筛选 -->
+    <!-- 分类筛选 (使用文档中的 .filter-bar) -->
     <div class="filter-bar">
         <button data-filter="all" class="active">全部</button>
         <button data-filter="mountain">山川</button>
@@ -41,21 +37,19 @@
         <button data-filter="forest">森林</button>
     </div>
 
-    <!-- ✅ 瀑布流作品展示 -->
+    <!-- 瀑布流容器 (使用文档中的 .masonry) -->
     <div class="masonry" id="gallery">
-        <!-- JS 动态生成 -->
+        <!-- JS 动态插入 .item -->
     </div>
 </main>
 
-<!-- ✅ 灯箱 -->
+<!-- 灯箱 (使用文档中的 .lightbox) -->
 <div class="lightbox" id="lightbox">
     <span class="close">&times;</span>
-    <img src="" alt="预览图" />
+    <img src="" alt="预览大图">
     <p id="lightbox-title"></p>
 </div>
 
-<!-- ✅ 脚本 -->
 <script src="main.js"></script>
-
 </body>
 </html>
