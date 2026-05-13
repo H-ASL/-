@@ -17,7 +17,6 @@
 </header>
 
 <main>
-
     <!-- 上传区域 -->
     <div class="upload-area">
         <input type="file" id="uploadInput" accept="image/*" multiple hidden>
@@ -38,44 +37,10 @@
         <button data-filter="forest">森林</button>
     </div>
 
-    <!-- 瀑布流容器（统一渲染） -->
+    <!-- 瀑布流容器 -->
     <div class="masonry" id="gallery">
-
-        <!-- 原代码里的图片（现在和上传的图片行为一致） -->
-        <figure class="item" data-category="mountain">
-            <button class="delete-btn">&times;</button>
-            <img src="/-/images/image1.jpg" alt="雪山">
-            <div class="overlay">
-                <h3>雪山日落</h3>
-            </div>
-        </figure>
-
-        <figure class="item" data-category="ocean">
-            <button class="delete-btn">&times;</button>
-            <img src="/-/images/image2.jpg" alt="海洋">
-            <div class="overlay">
-                <h3>海上帆船</h3>
-            </div>
-        </figure>
-
-        <figure class="item" data-category="forest">
-            <button class="delete-btn">&times;</button>
-            <img src="/-/images/image3.jpg" alt="森林">
-            <div class="overlay">
-                <h3>林间光影</h3>
-            </div>
-        </figure>
-
-        <figure class="item" data-category="mountain">
-            <button class="delete-btn">&times;</button>
-            <img src="/-/images/image4.jpg" alt="红叶">
-            <div class="overlay">
-                <h3>秋日红叶</h3>
-            </div>
-        </figure>
-
+        <!-- 动态生成的图片项将在这里显示 -->
     </div>
-
 </main>
 
 <!-- ===== 灯箱 ===== -->
@@ -123,6 +88,7 @@
                 item.className = 'item';
                 item.dataset.category = p.category;
 
+                // ✅ 修改点 1：在 HTML 结构中加入删除按钮
                 item.innerHTML = `
                     <button class="delete-btn">&times;</button>
                     <img src="${p.src}" alt="${p.title}">
@@ -131,6 +97,7 @@
                     </div>
                 `;
 
+                // ✅ 修改点 2：为删除按钮绑定事件
                 item.querySelector('.delete-btn').addEventListener('click', (e) => {
                     e.stopPropagation(); // 阻止事件冒泡，防止触发灯箱
                     if (confirm('确定要删除这张作品吗？')) {
