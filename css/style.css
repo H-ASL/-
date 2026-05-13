@@ -245,3 +245,126 @@ footer {
 .photo-grid a {
     cursor: zoom-in;
 }
+/* ===== 分类按钮 ===== */
+.filter-bar {
+    text-align: center;
+    margin: 20px 0 30px;
+}
+
+.filter-bar button {
+    padding: 8px 16px;
+    margin: 0 6px;
+    border: none;
+    border-radius: 20px;
+    background: #e5e7eb;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filter-bar button.active {
+    background: #6366f1;
+    color: white;
+}
+
+/* ===== 瀑布流 ===== */
+.masonry {
+    column-count: 3;
+    column-gap: 20px;
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+.item {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    cursor: pointer;
+}
+
+.item img {
+    width: 100%;
+    display: block;
+}
+
+/* 悬停标题 */
+.overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.item:hover .overlay {
+    opacity: 1;
+}
+
+/* ===== 灯箱 ===== */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 999;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 10px;
+}
+
+.lightbox p {
+    color: white;
+    margin-top: 12px;
+    font-size: 16px;
+}
+
+.lightbox .close {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+    .masonry { column-count: 2; }
+}
+@media (max-width: 600px) {
+    .masonry { column-count: 1; }
+}
+/* ===== 上传区域 ===== */
+.upload-area {
+    text-align: center;
+    margin: 20px 0 10px;
+}
+
+.upload-area button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background: #6366f1;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.upload-area select {
+    margin-left: 10px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+}
