@@ -37,12 +37,10 @@
     </div>
 
     <!-- 瀑布流容器 -->
-    <div class="masonry" id="gallery">
-        <!-- 动态生成的图片项将在这里显示 -->
-    </div>
+    <div class="masonry" id="gallery"></div>
 </main>
 
-<!-- ===== 灯箱 ===== -->
+<!-- 灯箱 -->
 <div class="lightbox" id="lightbox">
     <span class="close">&times;</span>
     <img src="" alt="">
@@ -54,130 +52,117 @@
 </footer>
 
 <script>
-    // ================== DOM 元素 ==================
-    const gallery = document.getElementById('gallery');
-    const filterBar = document.querySelector('.filter-bar');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = lightbox.querySelector('img');
-    const lightboxTitle = document.getElementById('lightbox-title');
-    const uploadInput = document.getElementById('uploadInput');
-    const uploadBtn = document.getElementById('uploadBtn');
-    const categorySelect = document.getElementById('categorySelect');
-    const dropZone = document.getElementById('dropZone');
-    const progressContainer = document.getElementById('progressContainer');
-    const progressBar = document.getElementById('progressBar');
+/* ================== DOM ================== */
+const gallery = document.getElementById('gallery');
+const filterBar = document.querySelector('.filter-bar');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = lightbox.querySelector('img');
+const lightboxTitle = document.getElementById('lightbox-title');
+const uploadInput = document.getElementById('uploadInput');
+const uploadBtn = document.getElementById('uploadBtn');
 
-    // ================== 数据层 ==================
-    const STORAGE_KEY = 'photo_portfolio';
+/* ================== 数据 ================== */
+const STORAGE_KEY = 'photo_portfolio';
+const getPhotos = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+const savePhotos = (photos) => localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
 
-    function getPhotos() {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    }
+/* ================== 自动分类 ================== */
+function autoDetectCategory(file) {
+    const name = file.name.toLowerCase();
+    if (name.includes('mountain') || name.includes('shan')) return 'mountain';
+    if (name.includes('ocean') || name.includes('sea') || name.includes('hai')) return 'ocean';
+    if (name.includes('forest') || name.includes('tree') || name.includes('lin')) return 'forest';
+    if (name.includes('river') || name.includes('he')) return 'river';
+    if (name.includes('city') || name.includes('cheng')) return 'city';
+    if (name.includes('animal') || name.includes('dog') || name.includes('cat')) return 'animal';
+    if (name.includes('nature')) return 'nature';
+    return 'other';
+}
 
-    function savePhotos(photos) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
-    }
+/* ================== 渲染 ================== */
+function renderGallery(filter = 'all') {
+    gallery.innerHTML = '';
+    getPhotos()
+        .filter(p => filter === 'all' || p.category === filter)
+        .forEach((p, i) => {
+            const item = document.createElement('figure');
+            item.className = 'item';
+            item.dataset.category = p.category;
 
-    // ================== 渲染逻辑 ==================
-    function renderGallery(filter = 'all') {
-        gallery.innerHTML = '';
-        const photos = getPhotos();
+            item.innerHTML = `
+                <button class="delete-btn">&times;</button>
+                <img src="${p.src}" alt="${p.title}">
+                <div class="overlay"><h3>${p.title}</h3></div>
+            `;
 
-        photos
-            .filter(p => filter === 'all' || p.category === filter)
-            .forEach((p, index) => {
-                const item = document.createElement('figure');
-                item.className = 'item';
-                item.dataset.category = p.category;
-
-                // 修改点 1：在 HTML 结构中加入删除按钮
-                item.innerHTML = `
-                    <button class="delete-btn">&times;</button>
-                    <img src="${p.src}" alt="${p.title}">
-                    <div class="overlay">
-                        <h3>${p.title}</h3>
-                    </div>
-                `;
-
-                // 修改点 2：为删除按钮绑定事件
-                item.querySelector('.delete-btn').addEventListener('click', (e) => {
-                    e.stopPropagation(); // 阻止事件冒泡，防止触发灯箱
-                    if (confirm('确定要删除这张作品吗？')) {
-                        const currentFilter = document.querySelector('.filter-bar .active').dataset.filter;
-                        deletePhoto(index, currentFilter);
-                    }
-                });
-
-                // 点击图片打开灯箱
-                item.querySelector('img').addEventListener('click', () => {
-                    lightboxImg.src = p.src;
-                    lightboxTitle.textContent = p.title;
-                    lightbox.style.display = 'flex';
-                });
-
-                gallery.appendChild(item);
+            item.querySelector('.delete-btn').addEventListener('click', e => {
+                e.stopPropagation();
+                if (confirm('确定要删除这张作品吗？')) {
+                    deletePhoto(i, filter);
+                }
             });
-    }
 
-    // ================== 删除逻辑 ==================
-    function deletePhoto(index, currentFilter) {
-        const photos = getPhotos();
-        photos.splice(index, 1);
-        savePhotos(photos);
-        renderGallery(currentFilter); // 重新渲染当前分类
-    }
+            item.querySelector('img').addEventListener('click', () => {
+                lightboxImg.src = p.src;
+                lightboxTitle.textContent = p.title;
+                lightbox.style.display = 'flex';
+            });
 
-    // ================== 分类筛选 ==================
-    filterBar.addEventListener('click', (e) => {
-        if (e.target.tagName !== 'BUTTON') return;
+            gallery.appendChild(item);
+        });
+}
 
-        filterBar.querySelector('.active')?.classList.remove('active');
-        e.target.classList.add('active');
+/* ================== 删除 ================== */
+function deletePhoto(index, currentFilter) {
+    const photos = getPhotos();
+    photos.splice(index, 1);
+    savePhotos(photos);
+    renderGallery(currentFilter);
+}
 
-        const filter = e.target.dataset.filter;
-        renderGallery(filter);
-    });
+/* ================== 分类 ================== */
+filterBar.addEventListener('click', e => {
+    if (e.target.tagName !== 'BUTTON') return;
+    filterBar.querySelector('.active')?.classList.remove('active');
+    e.target.classList.add('active');
+    renderGallery(e.target.dataset.filter);
+});
 
-    // ================== 上传功能 ==================
-    uploadBtn.addEventListener('click', () => uploadInput.click());
+/* ================== 上传（✅ 修复版） ================== */
+uploadBtn.addEventListener('click', () => uploadInput.click());
 
-    uploadInput.addEventListener('change', (e) => {
-        const files = Array.from(e.target.files);
-        if (files.length === 0) return;
+uploadInput.addEventListener('change', async e => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
 
-        const photos = getPhotos();
-        const category = categorySelect.value;
+    const photos = getPhotos();
 
-        files.forEach(file => {
+    await Promise.all(files.map(file => {
+        return new Promise(resolve => {
             const reader = new FileReader();
-            reader.onload = (event) => {
+            reader.onload = () => {
                 photos.unshift({
-                    src: event.target.result,
+                    src: reader.result,
                     title: file.name.split('.')[0],
-                    category: category
+                    category: autoDetectCategory(file)
                 });
+                resolve();
             };
             reader.readAsDataURL(file);
         });
+    }));
 
-        setTimeout(() => {
-            savePhotos(photos);
-            renderGallery('all'); // 上传后默认回到“全部”视图
-        }, 100);
-    });
-
-    // ================== 灯箱关闭 ==================
-    lightbox.querySelector('.close').addEventListener('click', () => {
-        lightbox.style.display = 'none';
-    });
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            lightbox.style.display = 'none';
-        }
-    });
-
-    // ================== 初始化 ==================
+    savePhotos(photos);
     renderGallery('all');
+    uploadInput.value = ''; // ✅ 永不报错
+});
+
+/* ================== 灯箱关闭 ================== */
+lightbox.querySelector('.close').addEventListener('click', () => lightbox.style.display = 'none');
+lightbox.addEventListener('click', e => e.target === lightbox && (lightbox.style.display = 'none'));
+
+/* ================== 初始化 ================== */
+renderGallery('all');
 </script>
 
 </body>
