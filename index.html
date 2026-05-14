@@ -19,14 +19,8 @@
 <main>
     <!-- 上传区域 -->
     <div class="upload-area">
-        <input type="file" id="uploadInput" accept="image/png, image/jpeg, image/webp" multiple hidden>
+        <input type="file" id="uploadInput" accept="image/*" multiple hidden>
         <button id="uploadBtn">+ 上传照片</button>
-
-        <select id="categorySelect">
-            <option value="mountain">山川</option>
-            <option value="ocean">海洋</option>
-            <option value="forest">森林</option>
-        </select>
     </div>
 
     <!-- 分类按钮 -->
@@ -35,6 +29,10 @@
         <button data-filter="mountain">山川</button>
         <button data-filter="ocean">海洋</button>
         <button data-filter="forest">森林</button>
+        <button data-filter="river">河流</button>
+        <button data-filter="city">城市</button>
+        <button data-filter="animal">动物</button>
+        <button data-filter="nature">自然</button>
     </div>
 
     <!-- 瀑布流容器 -->
