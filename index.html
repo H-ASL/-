@@ -63,6 +63,9 @@
     const uploadInput = document.getElementById('uploadInput');
     const uploadBtn = document.getElementById('uploadBtn');
     const categorySelect = document.getElementById('categorySelect');
+    const dropZone = document.getElementById('dropZone');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
 
     // ================== 数据层 ==================
     const STORAGE_KEY = 'photo_portfolio';
@@ -179,3 +182,13 @@
 
 </body>
 </html>
+
+<!-- 拖拽上传区域 -->
+<div class="drop-zone" id="dropZone">
+    <p>或将图片拖拽到此处</p>
+</div>
+
+<!-- 上传进度条 -->
+<div class="progress-container" id="progressContainer">
+    <div class="progress-bar" id="progressBar"></div>
+</div>

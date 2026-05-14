@@ -390,3 +390,36 @@ footer {
 .delete-btn:hover {
     background: rgba(220, 38, 38, 0.9);
 }
+/* ===== 拖拽区 ===== */
+.drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    color: #888;
+    margin-top: 1rem;
+    transition: all 0.3s;
+}
+
+.drop-zone.drag-over {
+    border-color: #333;
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* ===== 进度条 ===== */
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    margin-top: 1rem;
+    overflow: hidden;
+    display: none; /* 默认隐藏 */
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    transition: width 0.3s ease;
+}

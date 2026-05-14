@@ -7,6 +7,9 @@ const lbTitle = document.getElementById("lightbox-title");
 const uploadInput = document.getElementById("uploadInput");
 const uploadBtn = document.getElementById("uploadBtn");
 const gallery = document.getElementById("gallery");
+const dropZone = document.getElementById("dropZone"); // 拖拽区
+const progressContainer = document.getElementById("progressContainer"); // 进度条容器
+const progressBar = document.getElementById("progressBar"); // 进度条
 
 /* ================== 数据层 ================== */
 const STORAGE_KEY = "photos";
@@ -97,19 +100,29 @@ lightbox.addEventListener("click", e => {
     }
 });
 
-/* ================== 上传逻辑（最终修复版） ================== */
-uploadBtn.addEventListener("click", () => uploadInput.click());
-
-uploadInput.addEventListener("change", e => {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
-
+/* ================== 核心：处理文件（供选择和拖拽共用） ================== */
+function handleFiles(files) {
     const photos = getPhotos();
+    const fileArray = Array.from(files);
+    if (!fileArray.length) return;
 
-    // 使用 Promise.all 确保所有图片加载完成
-    const readers = files.map(file => {
+    // 显示进度条
+    progressContainer.style.display = "block";
+    progressBar.style.width = "0%";
+
+    const readers = fileArray.map((file, index) => {
         return new Promise(resolve => {
             const reader = new FileReader();
+            
+            // ✅ 监听读取进度
+            reader.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    const totalPercent = ((index + percent / 100) / fileArray.length) * 100;
+                    progressBar.style.width = `${totalPercent}%`;
+                }
+            };
+
             reader.onload = () => {
                 resolve({
                     src: reader.result,
@@ -125,8 +138,38 @@ uploadInput.addEventListener("change", e => {
         photos.unshift(...results);
         savePhotos(photos);
         renderGallery("all");
-        uploadInput.value = ""; // 关键：清空 input，防止重复上传同一张
+        uploadInput.value = ""; // 清空 input
+
+        // 完成后隐藏进度条
+        setTimeout(() => {
+            progressContainer.style.display = "none";
+            progressBar.style.width = "0%";
+        }, 500);
     });
+}
+
+/* ================== 上传逻辑（点击 + 拖拽） ================== */
+uploadBtn.addEventListener("click", () => uploadInput.click());
+
+// 点击选择
+uploadInput.addEventListener("change", (e) => {
+    handleFiles(e.target.files);
+});
+
+// 拖拽逻辑
+dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.classList.add("drag-over");
+});
+
+dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("drag-over");
+});
+
+dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("drag-over");
+    handleFiles(e.dataTransfer.files);
 });
 
 /* ================== 初始化 ================== */
