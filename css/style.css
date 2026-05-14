@@ -1,4 +1,3 @@
-/* --- 全局样式 --- */
 * {
     margin: 0;
     padding: 0;
@@ -6,420 +5,227 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
     color: #333;
-    background-color: #f8f9fa; /* 浅灰色背景，让页面更柔和 */
 }
 
-a {
-    text-decoration: none;
-    color: #007bff;
-}
-
-a:hover {
-    color: #0056b3;
-}
-
-ul {
-    list-style: none;
-}
-
-.container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 0 20px;
-}
-
-/* --- 头部导航 --- */
-header {
+/* 导航栏 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
     background: #fff;
-    padding: 1rem 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 100;
 }
 
-header h1 {
-    text-align: center;
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
-    color: #333;
-}
-
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
-
-nav a {
-    color: #555;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
-
-nav a:hover, nav a.active {
-    background: #007bff;
-    color: #fff;
-}
-
-/* --- 主要内容区 --- */
-main {
-    padding: 2rem 0;
-}
-
-/* --- 卡片样式 (用于关于我页面) --- */
-.card {
-    background: #fff;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.profile-card {
-    text-align: center;
-}
-
-.avatar-container {
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 1.5rem;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 5px solid #f0f0f0;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 确保图片不变形 */
-}
-
-.highlight {
-    color: #007bff;
-}
-
-.job-title {
-    font-size: 1.1rem;
-    color: #666;
-    font-style: italic;
-    margin-bottom: 1.5rem;
-    display: block;
-}
-
-.divider {
-    border: 0;
-    height: 1px;
-    background: #eee;
-    margin: 1.5rem 0;
-}
-
-.card p {
-    margin-bottom: 1rem;
-    color: #555;
-    font-size: 1.05rem;
-}
-
-/* 引用块 */
-blockquote {
-    background: #f8f9fa;
-    border-left: 4px solid #007bff;
-    padding: 1rem 1.5rem;
-    margin: 1.5rem 0;
-    font-style: italic;
-    color: #666;
-}
-
-/* 标签样式 */
-.tags {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.tag {
-    background: #e9ecef;
-    color: #495057;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.tag i {
-    color: #007bff;
-}
-
-/* --- 页脚 --- */
-footer {
-    text-align: center;
-    padding: 2rem 0;
-    background: #333;
-    color: #fff;
-    font-size: 0.9rem;
-}
-
-/* --- 响应式设计 --- */
-@media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: center;
-    }
-    
-    .card {
-        padding: 1.5rem;
-    }
-    
-    .avatar-container {
-        width: 120px;
-        height: 120px;
-    }
-}
-/* ===== 关于我页面 ===== */
-.card {
-    max-width: 800px;
-    margin: 40px auto;
-    background: white;
-    padding: 40px;
-    border-radius: 14px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-}
-
-.card h2 {
-    font-size: 26px;
-    margin-bottom: 10px;
-}
-
-.card p {
-    font-size: 16px;
-    line-height: 1.8;
-    margin-bottom: 16px;
-}
-
-.card hr {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 20px 0;
-}
-/* ===== 首页作品展示优化 ===== */
-
-/* 限制图片最大高度，防止过大 */
-.photo-grid img {
-    width: 100%;
-    height: 240px;          /* ✅ 统一高度 */
-    object-fit: cover;      /* ✅ 不变形，裁剪 */
-    border-radius: 10px;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-/* hover 放大一点，增强可点击感 */
-.photo-grid a:hover img {
-    transform: scale(1.03);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-}
-
-/* 卡片本身不要太宽 */
-.photo-grid figure {
-    margin: 0;
-    overflow: hidden;
-    border-radius: 12px;
-    background: white;
-}
-.photo-grid {
-    gap: 20px;
-}
-.photo-grid a {
-    cursor: zoom-in;
-}
-/* ===== 分类按钮 ===== */
-.filter-bar {
-    text-align: center;
-    margin: 20px 0 30px;
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .filter-bar button {
-    padding: 8px 16px;
-    margin: 0 6px;
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
     border: none;
-    border-radius: 20px;
-    background: #e5e7eb;
+    background: #eee;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    transition: background 0.2s;
 }
 
-.filter-bar button.active {
-    background: #6366f1;
+.filter-bar button.active,
+.filter-bar button:hover {
+    background: #007bff;
     color: white;
 }
 
-/* ===== 瀑布流 ===== */
-.masonry {
-    column-count: 3;
-    column-gap: 20px;
-    max-width: 1200px;
-    margin: auto;
-    padding: 0 20px;
+/* 上传区 */
+.upload-section {
+    padding: 1rem 2rem;
+    text-align: center;
+    background: #fff;
+    margin: 1rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.item {
-    break-inside: avoid;
-    margin-bottom: 20px;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    background: white;
+.upload-section button {
+    padding: 0.75rem 1.5rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    position: relative;
+    margin-right: 1rem;
 }
 
-.item img {
+.drop-zone {
+    padding: 1rem;
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.drop-zone.drag-over {
+    border-color: #007bff;
+    background: #f0f8ff;
+}
+
+.progress-container {
     width: 100%;
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #007bff;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+/* 瀑布流 */
+.gallery {
+    column-count: 4;
+    column-gap: 1rem;
+    padding: 1rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.gallery .item {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: #fff;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.gallery .item:hover {
+    transform: scale(1.02);
+}
+
+.gallery .item img {
+    width: 100%;
+    height: auto;
     display: block;
 }
 
-/* 悬停标题 */
-.overlay {
+.gallery .item .overlay {
     position: absolute;
     bottom: 0;
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.5);
     color: white;
-    opacity: 0;
-    transition: opacity 0.3s;
+    padding: 0.5rem;
+    text-align: center;
+    transform: translateY(100%);
+    transition: transform 0.2s;
 }
 
-.item:hover .overlay {
+.gallery .item:hover .overlay {
+    transform: translateY(0);
+}
+
+.gallery .item .delete-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.gallery .item:hover .delete-btn {
     opacity: 1;
 }
 
-/* ===== 灯箱 ===== */
+/* 灯箱 */
 .lightbox {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
     display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    z-index: 999;
 }
 
 .lightbox img {
     max-width: 90%;
-    max-height: 85vh;
-    border-radius: 10px;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
 }
 
-.lightbox p {
+.lightbox-title {
     color: white;
-    margin-top: 12px;
-    font-size: 16px;
+    margin-top: 1rem;
+    font-size: 1.2rem;
 }
 
-.lightbox .close {
+.close {
     position: absolute;
-    top: 30px;
-    right: 40px;
-    font-size: 40px;
+    top: 1rem;
+    right: 1rem;
     color: white;
+    font-size: 2rem;
     cursor: pointer;
+    z-index: 1001;
 }
 
 /* 响应式 */
-@media (max-width: 900px) {
-    .masonry { column-count: 2; }
-}
-@media (max-width: 600px) {
-    .masonry { column-count: 1; }
-}
-/* ===== 上传区域 ===== */
-.upload-area {
-    text-align: center;
-    margin: 20px 0 10px;
+@media (max-width: 1024px) {
+    .gallery {
+        column-count: 3;
+    }
 }
 
-.upload-area button {
-    padding: 10px 20px;
-    border-radius: 20px;
-    border: none;
-    background: #6366f1;
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
+@media (max-width: 768px) {
+    .gallery {
+        column-count: 2;
+    }
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 
-.upload-area select {
-    margin-left: 10px;
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-}
-/* ===== 删除按钮 ===== */
-.delete-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-    z-index: 10;
-    transition: background 0.2s;
-}
-
-.delete-btn:hover {
-    background: rgba(220, 38, 38, 0.9);
-}
-/* ===== 拖拽区 ===== */
-.drop-zone {
-    border: 2px dashed #ccc;
-    border-radius: 8px;
-    padding: 2rem;
-    text-align: center;
-    color: #888;
-    margin-top: 1rem;
-    transition: all 0.3s;
-}
-
-.drop-zone.drag-over {
-    border-color: #333;
-    background-color: rgba(0,0,0,0.05);
-}
-
-/* ===== 进度条 ===== */
-.progress-container {
-    width: 100%;
-    height: 6px;
-    background: #eee;
-    border-radius: 3px;
-    margin-top: 1rem;
-    overflow: hidden;
-    display: none; /* 默认隐藏 */
-}
-
-.progress-bar {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #4facfe, #00f2fe);
-    transition: width 0.3s ease;
+@media (max-width: 480px) {
+    .gallery {
+        column-count: 1;
+    }
 }
