@@ -173,3 +173,11 @@ function renderGallery(filter = "all") {
 }
 
 renderGallery();
+
+uploadInput.addEventListener("change", e => {
+    const files = Array.from(e.target.files);
+    const selectedCategory = categorySelect.value; 
+    console.log("当前选中的分类是:", selectedCategory); // 打开浏览器控制台(F12)查看
+    
+    // ...后续保存逻辑
+});
