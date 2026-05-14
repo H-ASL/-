@@ -1,6 +1,6 @@
 // ================== Supabase 初始化 ==================
-const SUPABASE_URL = "https://你的项目.supabase.co";
-const SUPABASE_ANON_KEY = "你的anon_key";
+const SUPABASE_URL = "https://photo-portfolio.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhZ21rb2t6dWRwdmxkYWNlbm90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MzQxNzMsImV4cCI6MjA5NDMxMDE3M30.Tjy65W0JlP0rrFvHlnqaE57G7tb0RDz_HnKvtXdOvzU";
 
 const supabase = window.supabase.createClient(
     SUPABASE_URL,
