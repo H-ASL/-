@@ -1,7 +1,16 @@
-/* ================== 安全获取 DOM（✅ 防 null） ================== */
+// ================== Supabase 初始化 ==================
+const SUPABASE_URL = "https://你的项目.supabase.co";
+const SUPABASE_ANON_KEY = "你的anon_key";
+
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+// ================== DOM 元素 ==================
 const $ = (selector) => document.querySelector(selector);
 
-const buttons = $$(".filter-bar button");
+const buttons = document.querySelectorAll(".filter-bar button");
 const gallery = $("#gallery");
 const lightbox = $("#lightbox");
 const lbImg = $("#lightbox-img");
@@ -13,7 +22,7 @@ const dropZone = $("#dropZone");
 const progressContainer = $("#progressContainer");
 const progressBar = $("#progressBar");
 
-/* ================== 数据层 ================== */
+// ================== 数据层 ==================
 const STORAGE_KEY = "photos";
 
 function getPhotos() {
@@ -28,7 +37,7 @@ function savePhotos(photos) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
 }
 
-/* ================== 自动分类 ================== */
+// ================== 自动分类 ==================
 function autoDetectCategory(file) {
     const name = file.name.toLowerCase();
     if (name.includes("mountain") || name.includes("shan")) return "mountain";
@@ -38,7 +47,7 @@ function autoDetectCategory(file) {
     return "other";
 }
 
-/* ================== 渲染画廊 ================== */
+// ================== 渲染画廊 ==================
 function renderGallery(filter = "all") {
     if (!gallery) return;
 
@@ -59,8 +68,7 @@ function renderGallery(filter = "all") {
             item.querySelector(".delete-btn")?.addEventListener("click", e => {
                 e.stopPropagation();
                 if (confirm("确定要删除这张作品吗？")) {
-                    deletePhoto(i);
-                    renderGallery(filter);
+                    deletePhoto(i, filter);
                 }
             });
 
@@ -74,14 +82,15 @@ function renderGallery(filter = "all") {
         });
 }
 
-/* ================== 删除 ================== */
-function deletePhoto(index) {
+// ================== 删除 ==================
+function deletePhoto(index, currentFilter) {
     const photos = getPhotos();
     photos.splice(index, 1);
     savePhotos(photos);
+    renderGallery(currentFilter);
 }
 
-/* ================== 分类筛选 ================== */
+// ================== 分类筛选 ==================
 buttons?.forEach(btn => {
     btn.addEventListener("click", () => {
         buttons.forEach(b => b.classList.remove("active"));
@@ -90,7 +99,7 @@ buttons?.forEach(btn => {
     });
 });
 
-/* ================== 灯箱关闭 ================== */
+// ================== 灯箱关闭 ==================
 lightbox?.querySelector(".close")?.addEventListener("click", () => {
     lightbox.style.display = "none";
 });
@@ -98,48 +107,56 @@ lightbox?.addEventListener("click", e => {
     if (e.target === lightbox) lightbox.style.display = "none";
 });
 
-/* ================== 核心：处理文件（✅ 防 null） ================== */
+// ================== 核心：上传到 Supabase ==================
+async function uploadToSupabase(file, category) {
+    const fileName = `${Date.now()}_${file.name}`;
+
+    const { data, error } = await supabase
+        .storage
+        .from('photos')
+        .upload(fileName, file);
+
+    if (error) {
+        alert('上传失败：' + error.message);
+        return;
+    }
+
+    const { data: urlData } = supabase
+        .storage
+        .from('photos')
+        .getPublicUrl(data.path);
+
+    const photos = getPhotos();
+    photos.unshift({
+        src: urlData.publicUrl, // ✅ 只存 URL
+        title: file.name.split('.')[0],
+        category
+    });
+
+    savePhotos(photos);
+    renderGallery('all');
+}
+
+// ================== 处理文件（✅ 只绑定一次） ==================
 function handleFiles(files) {
     if (!files || !files.length) return;
 
-    const photos = getPhotos();
     const fileArray = Array.from(files);
 
     if (progressContainer) progressContainer.style.display = "block";
     if (progressBar) progressBar.style.width = "0%";
 
-    const readers = fileArray.map((file, index) => {
-        return new Promise(resolve => {
-            const reader = new FileReader();
-            reader.onprogress = (e) => {
-                if (e.lengthComputable && progressBar) {
-                    const percent = Math.round((e.loaded / e.total) * 100);
-                    const totalPercent = ((index + percent / 100) / fileArray.length) * 100;
-                    progressBar.style.width = `${totalPercent}%`;
-                }
-            };
-            reader.onload = () => resolve({
-                src: reader.result,
-                title: file.name.split(".")[0],
-                category: autoDetectCategory(file)
-            });
-            reader.readAsDataURL(file);
-        });
+    // ✅ 逐个上传到 Supabase
+    fileArray.forEach(async (file) => {
+        await uploadToSupabase(file, autoDetectCategory(file));
     });
 
-    Promise.all(readers).then(results => {
-        photos.unshift(...results);
-        savePhotos(photos);
-        renderGallery("all");
-
-        // ✅ 彻底修复 null
-        if (uploadInput) uploadInput.value = "";
-        if (progressContainer) progressContainer.style.display = "none";
-        if (progressBar) progressBar.style.width = "0%";
-    });
+    if (uploadInput) uploadInput.value = "";
+    if (progressContainer) progressContainer.style.display = "none";
+    if (progressBar) progressBar.style.width = "0%";
 }
 
-/* ================== 上传逻辑（✅ 只绑定一次） ================== */
+// ================== 上传逻辑 ==================
 if (uploadBtn) uploadBtn.addEventListener("click", () => uploadInput?.click());
 if (uploadInput) uploadInput.addEventListener("change", (e) => handleFiles(e.target.files));
 
@@ -155,14 +172,6 @@ if (dropZone) {
         handleFiles(e.dataTransfer.files);
     });
 }
-const uploadInput = document.getElementById("uploadInput");
 
-if (uploadInput) {
-    uploadInput.addEventListener("change", (e) => {
-        handleFiles(e.target.files);
-        uploadInput.value = ""; // ✅ 安全
-    });
-}
-
-/* ================== 初始化 ================== */
+// ================== 初始化 ==================
 renderGallery("all");
