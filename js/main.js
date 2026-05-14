@@ -1,20 +1,32 @@
-/* ================== DOM 元素 ================== */
-const buttons = document.querySelectorAll(".filter-bar button");
-const lightbox = document.getElementById("lightbox");
-const lbImg = lightbox.querySelector("img");
-const lbTitle = document.getElementById("lightbox-title");
+/* ================== 安全获取 DOM（✅ 防 null） ================== */
+const $ = (selector) => document.querySelector(selector);
 
-const uploadInput = document.getElementById("uploadInput");
-const uploadBtn = document.getElementById("uploadBtn");
-const gallery = document.getElementById("gallery");
-const dropZone = document.getElementById("dropZone");
-const progressContainer = document.getElementById("progressContainer");
-const progressBar = document.getElementById("progressBar");
+const buttons = $$(".filter-bar button");
+const gallery = $("#gallery");
+const lightbox = $("#lightbox");
+const lbImg = $("#lightbox-img");
+const lbTitle = $("#lightbox-title");
+
+const uploadBtn = $("#uploadBtn");
+const uploadInput = $("#uploadInput");
+const dropZone = $("#dropZone");
+const progressContainer = $("#progressContainer");
+const progressBar = $("#progressBar");
 
 /* ================== 数据层 ================== */
 const STORAGE_KEY = "photos";
-function getPhotos() { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-function savePhotos(photos) { localStorage.setItem(STORAGE_KEY, JSON.stringify(photos)); }
+
+function getPhotos() {
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function savePhotos(photos) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
+}
 
 /* ================== 自动分类 ================== */
 function autoDetectCategory(file) {
@@ -28,32 +40,41 @@ function autoDetectCategory(file) {
 
 /* ================== 渲染画廊 ================== */
 function renderGallery(filter = "all") {
+    if (!gallery) return;
+
     gallery.innerHTML = "";
-    getPhotos().filter(p => filter === "all" || p.category === filter).forEach((p, i) => {
-        const item = document.createElement("figure");
-        item.className = "item";
-        item.dataset.category = p.category;
-        item.innerHTML = `
-            <button class="delete-btn">&times;</button>
-            <img src="${p.src}" />
-            <div class="overlay"><h3>${p.title}</h3></div>
-        `;
-        item.querySelector(".delete-btn").addEventListener("click", e => {
-            e.stopPropagation();
-            if (confirm("确定要删除这张作品吗？")) {
-                deletePhoto(i);
-                renderGallery(filter);
-            }
+    getPhotos()
+        .filter(p => filter === "all" || p.category === filter)
+        .forEach((p, i) => {
+            const item = document.createElement("figure");
+            item.className = "item";
+            item.dataset.category = p.category;
+
+            item.innerHTML = `
+                <button class="delete-btn">&times;</button>
+                <img src="${p.src}" />
+                <div class="overlay"><h3>${p.title}</h3></div>
+            `;
+
+            item.querySelector(".delete-btn")?.addEventListener("click", e => {
+                e.stopPropagation();
+                if (confirm("确定要删除这张作品吗？")) {
+                    deletePhoto(i);
+                    renderGallery(filter);
+                }
+            });
+
+            item.querySelector("img")?.addEventListener("click", () => {
+                if (lbImg) lbImg.src = p.src;
+                if (lbTitle) lbTitle.innerText = p.title;
+                if (lightbox) lightbox.style.display = "flex";
+            });
+
+            gallery.appendChild(item);
         });
-        item.querySelector("img").addEventListener("click", () => {
-            lbImg.src = p.src;
-            lbTitle.innerText = p.title;
-            lightbox.style.display = "flex";
-        });
-        gallery.appendChild(item);
-    });
 }
 
+/* ================== 删除 ================== */
 function deletePhoto(index) {
     const photos = getPhotos();
     photos.splice(index, 1);
@@ -61,7 +82,7 @@ function deletePhoto(index) {
 }
 
 /* ================== 分类筛选 ================== */
-buttons.forEach(btn => {
+buttons?.forEach(btn => {
     btn.addEventListener("click", () => {
         buttons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
@@ -70,23 +91,28 @@ buttons.forEach(btn => {
 });
 
 /* ================== 灯箱关闭 ================== */
-lightbox.querySelector(".close").addEventListener("click", () => lightbox.style.display = "none");
-lightbox.addEventListener("click", e => { if (e.target === lightbox) lightbox.style.display = "none"; });
+lightbox?.querySelector(".close")?.addEventListener("click", () => {
+    lightbox.style.display = "none";
+});
+lightbox?.addEventListener("click", e => {
+    if (e.target === lightbox) lightbox.style.display = "none";
+});
 
-/* ================== 核心：处理文件（修复无响应问题） ================== */
+/* ================== 核心：处理文件（✅ 防 null） ================== */
 function handleFiles(files) {
+    if (!files || !files.length) return;
+
     const photos = getPhotos();
     const fileArray = Array.from(files);
-    if (!fileArray.length) return;
 
-    progressContainer.style.display = "block";
-    progressBar.style.width = "0%";
+    if (progressContainer) progressContainer.style.display = "block";
+    if (progressBar) progressBar.style.width = "0%";
 
     const readers = fileArray.map((file, index) => {
         return new Promise(resolve => {
             const reader = new FileReader();
             reader.onprogress = (e) => {
-                if (e.lengthComputable) {
+                if (e.lengthComputable && progressBar) {
                     const percent = Math.round((e.loaded / e.total) * 100);
                     const totalPercent = ((index + percent / 100) / fileArray.length) * 100;
                     progressBar.style.width = `${totalPercent}%`;
@@ -105,25 +131,30 @@ function handleFiles(files) {
         photos.unshift(...results);
         savePhotos(photos);
         renderGallery("all");
-        uploadInput.value = "";
-        setTimeout(() => {
-            progressContainer.style.display = "none";
-            progressBar.style.width = "0%";
-        }, 500);
+
+        // ✅ 彻底修复 null
+        if (uploadInput) uploadInput.value = "";
+        if (progressContainer) progressContainer.style.display = "none";
+        if (progressBar) progressBar.style.width = "0%";
     });
 }
 
-/* ================== 上传逻辑（点击 + 拖拽） ================== */
-uploadBtn.addEventListener("click", () => uploadInput.click());
-uploadInput.addEventListener("change", (e) => handleFiles(e.target.files));
+/* ================== 上传逻辑（✅ 只绑定一次） ================== */
+if (uploadBtn) uploadBtn.addEventListener("click", () => uploadInput?.click());
+if (uploadInput) uploadInput.addEventListener("change", (e) => handleFiles(e.target.files));
 
-dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("drag-over"); });
-dropZone.addEventListener("dragleave", () => dropZone.classList.remove("drag-over"));
-dropZone.addEventListener("drop", (e) => {
-    e.preventDefault();
-    dropZone.classList.remove("drag-over");
-    handleFiles(e.dataTransfer.files);
-});
+if (dropZone) {
+    dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("drag-over");
+    });
+    dropZone.addEventListener("dragleave", () => dropZone.classList.remove("drag-over"));
+    dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("drag-over");
+        handleFiles(e.dataTransfer.files);
+    });
+}
 
 /* ================== 初始化 ================== */
 renderGallery("all");
