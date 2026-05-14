@@ -155,6 +155,14 @@ if (dropZone) {
         handleFiles(e.dataTransfer.files);
     });
 }
+const uploadInput = document.getElementById("uploadInput");
+
+if (uploadInput) {
+    uploadInput.addEventListener("change", (e) => {
+        handleFiles(e.target.files);
+        uploadInput.value = ""; // ✅ 安全
+    });
+}
 
 /* ================== 初始化 ================== */
 renderGallery("all");
