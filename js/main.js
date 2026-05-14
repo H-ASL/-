@@ -176,8 +176,45 @@ renderGallery();
 
 uploadInput.addEventListener("change", e => {
     const files = Array.from(e.target.files);
-    const selectedCategory = categorySelect.value; 
-    console.log("当前选中的分类是:", selectedCategory); // 打开浏览器控制台(F12)查看
-    
-    // ...后续保存逻辑
+    if (!files.length) return;
+
+    const photos = getPhotos();
+
+    files.forEach(file => {
+        const category = autoDetectCategory(file); // ✅ 自动分类
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            photos.unshift({
+                src: reader.result,
+                title: file.name.split(".")[0],
+                category
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+
+    setTimeout(() => {
+        savePhotos(photos);
+        renderGallery("all");
+        uploadInput.value = ""; // ✅ 防止重复上传同一张
+    }, 100);
 });
+function autoDetectCategory(file) {
+    const name = file.name.toLowerCase();
+
+    if (name.includes("mountain") || name.includes("shan")) {
+        return "mountain";
+    }
+    if (name.includes("ocean") || name.includes("sea") || name.includes("hai")) {
+        return "ocean";
+    }
+    if (name.includes("forest") || name.includes("tree") || name.includes("lin")) {
+        return "forest";
+    }
+    if (name.includes("animal") || name.includes("dog") || name.includes("cat")) {
+        return "animal";
+    }
+
+    return "other";
+}
